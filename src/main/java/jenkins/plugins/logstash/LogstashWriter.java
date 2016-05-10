@@ -149,7 +149,7 @@ public class LogstashWriter {
       String msg = "[logstash-plugin]: Failed to send log data to " + dao.getIndexerType() + ":" + dao.getDescription() + ".\n" +
         "[logstash-plugin]: No Further logs will be sent to " + dao.getDescription() + ".\n" +
         ExceptionUtils.getStackTrace(e);
-      logErrorMessage(msg);
+      logWarnMessage(msg);
     }
   }
 
@@ -169,6 +169,21 @@ public class LogstashWriter {
       logErrorMessage(msg);
     }
     return null;
+  }
+
+  /**
+   * Write warning message to errorStream.
+   *
+   * @param msg
+   */
+  private void logWarnMessage(String msg) {
+    try {
+      errorStream.write(msg.getBytes());
+      errorStream.flush();
+    } catch (IOException ex) {
+      // This should never happen, but if it does we just have to let it go.
+      ex.printStackTrace();
+    }
   }
 
   /**
