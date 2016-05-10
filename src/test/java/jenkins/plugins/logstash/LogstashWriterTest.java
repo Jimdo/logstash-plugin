@@ -259,7 +259,7 @@ public class LogstashWriterTest {
 
     // Verify results
     assertTrue("Results don't match", errorBuffer.toString().startsWith(exMessage));
-    assertTrue("Connection not broken", los.isConnectionBroken());
+    assertFalse("Connection broken", los.isConnectionBroken());
 
     // Verify logs still write but on further calls are made to dao
     errorBuffer.reset();
@@ -269,9 +269,9 @@ public class LogstashWriterTest {
     // Verify results
     assertEquals("Results don't match", "", errorBuffer.toString());
 
-    //Verify calls were made to the dao logging twice, not three times.
-    verify(mockDao, times(2)).buildPayload(Matchers.eq(mockBuildData), Matchers.eq("http://my-jenkins-url"), Matchers.anyListOf(String.class));
-    verify(mockDao, times(2)).push("{\"data\":{},\"message\":[\"test\"],\"source\":\"jenkins\",\"source_host\":\"http://my-jenkins-url\",\"@version\":1}");
+    //Verify calls were made to the dao three times, and the exception was ignored
+    verify(mockDao, times(3)).buildPayload(Matchers.eq(mockBuildData), Matchers.eq("http://my-jenkins-url"), Matchers.anyListOf(String.class));
+    verify(mockDao, times(3)).push("{\"data\":{},\"message\":[\"test\"],\"source\":\"jenkins\",\"source_host\":\"http://my-jenkins-url\",\"@version\":1}");
     verify(mockDao).getIndexerType();
     verify(mockDao, times(2)).getDescription();
   }
