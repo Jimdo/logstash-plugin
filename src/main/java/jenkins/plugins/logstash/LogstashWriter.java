@@ -149,9 +149,8 @@ public class LogstashWriter {
     try {
       dao.push(payload.toString());
     } catch (IOException e) {
-      String msg = "[logstash-plugin]: Failed to send log data to " + dao.getIndexerType() + ":" + dao.getDescription() + ".\n" +
-        "[logstash-plugin]: No Further logs will be sent to " + dao.getDescription() + ".\n" +
-        ExceptionUtils.getStackTrace(e);
+      String msg = "[logstash-plugin]: Failed to send log data to " + dao.getIndexerType() + ":" + dao.getDescription() + ": " +
+        e.getMessage();
       logWarnMessage(msg);
     }
   }
