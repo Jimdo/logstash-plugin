@@ -239,9 +239,7 @@ public class LogstashWriterTest {
 
 
     String msg = "test";
-    String exMessage = "[logstash-plugin]: Failed to send log data to REDIS:localhost:8080.\n" +
-      "[logstash-plugin]: No Further logs will be sent to localhost:8080.\n" +
-      "java.io.IOException: BOOM!";
+    String exMessage = "[logstash-plugin]: Failed to send log data to REDIS:localhost:8080: BOOM!";
 
     errorBuffer.reset();
 
@@ -273,7 +271,7 @@ public class LogstashWriterTest {
     verify(mockDao, times(3)).buildPayload(Matchers.eq(mockBuildData), Matchers.eq("http://my-jenkins-url"), Matchers.anyListOf(String.class));
     verify(mockDao, times(3)).push("{\"data\":{},\"message\":[\"test\"],\"source\":\"jenkins\",\"source_host\":\"http://my-jenkins-url\",\"@version\":1}");
     verify(mockDao).getIndexerType();
-    verify(mockDao, times(2)).getDescription();
+    verify(mockDao, times(1)).getDescription();
   }
 
   @Test
